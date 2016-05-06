@@ -1,3 +1,5 @@
+require('babel-polyfill');
+
 var renderer = PIXI.autoDetectRenderer(800, 600, { antialias: true });
 document.getElementById('game').appendChild(renderer.view);
 
