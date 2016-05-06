@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/Dumtard/RainbowPrismGame#readme",
   "devDependencies": {
-    "express": "^4.13.4"
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.0",
+    "express": "^4.13.4",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "through2": "^2.0.1"
   }
 }
