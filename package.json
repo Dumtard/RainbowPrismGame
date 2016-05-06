@@ -1,0 +1,22 @@
+{
+  "name": "rainbowprismgame",
+  "version": "1.0.0",
+  "description": "Prisms",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dumtard/RainbowPrismGame.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dumtard/RainbowPrismGame/issues"
+  },
+  "homepage": "https://github.com/Dumtard/RainbowPrismGame#readme",
+  "devDependencies": {
+    "express": "^4.13.4"
+  }
+}
