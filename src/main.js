@@ -1,5 +1,5 @@
 var renderer = PIXI.autoDetectRenderer(800, 600, { antialias: true });
-document.body.appendChild(renderer.view);
+document.getElementById('game').appendChild(renderer.view);
 
 // create the root of the scene graph
 var stage = new PIXI.Container();
@@ -45,8 +45,6 @@ for (var i = 0; i < 10; i++) {
     beams.push(new Beam(i*50, 30));
 }
 
-
-
 // run the render loop
 animate();
 
@@ -61,6 +59,6 @@ function animate() {
     }
 
     renderer.render(stage);
-    requestAnimationFrame( animate );
+    requestAnimationFrame(animate);
 }
 

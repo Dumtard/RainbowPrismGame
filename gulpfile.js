@@ -1,12 +1,15 @@
 var gulp = require('gulp'),
     browserify = require('browserify'),
-    through2 = require('through2');
+    through2 = require('through2'),
+    babelify = require('babelify'),
+    rename = require('gulp-rename'),
+    webserver = require('gulp-webserver');
 
 gulp.task('build', function () {
     return gulp.src('./src/main.js')
         .pipe(through2.obj(function (file, enc, next) {
             browserify(file.path, { debug: process.env.NODE_ENV === 'development' })
-                .transform(require('babelify'))
+                .transform(babelify, {presets: ['es2015']})
                 .bundle(function (err, res) {
                     if (err) { return next(err); }
 
@@ -18,12 +21,20 @@ gulp.task('build', function () {
             console.log(error.stack);
             this.emit('end');
         })
-        .pipe(require('gulp-rename')('main.js'))
-        .pipe(gulp.dest('dist'));
+        .pipe(rename('main.js'))
+        .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('watch', function() {
     gulp.watch(['./src/**/*.js'], ['build']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('serve', function() {
+    return gulp.src('./dist')
+        .pipe(webserver({
+            livereload: true,
+            open: true
+        }));
+});
+
+gulp.task('default', ['serve', 'watch']);
