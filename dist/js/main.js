@@ -6629,54 +6629,21 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],298:[function(require,module,exports){
-'use strict';
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-require('babel-polyfill');
-
-var Screen = function () {
-    function Screen(width, height, gridLength) {
-        _classCallCheck(this, Screen);
-
-        this.width = width;
-        this.height = height;
-        this.gridLength = gridLength;
-    }
-
-    _createClass(Screen, [{
-        key: 'getGridFromPosition',
-        value: function getGridFromPosition(x, y) {
-
-            return {
-                x: Math.floor(x / this.gridLength),
-                y: Math.floor(y / this.gridLength)
-            };
-        }
-    }]);
-
-    return Screen;
-}();
-
-var screen = new Screen(800, 600, 50);
-
-var renderer = PIXI.autoDetectRenderer(800, 600, { antialias: true });
-document.getElementById('game').appendChild(renderer.view);
-
-// create the root of the scene graph
-var stage = new PIXI.Container();
-
 var Beam = function () {
-    function Beam(x, y, colour, orientation) {
+    function Beam(x, y, colour, direction) {
         _classCallCheck(this, Beam);
 
         this.graphics = new PIXI.Graphics();
 
         stage.addChild(this.graphics);
 
-        this.direction = orientation;
+        this.direction = direction;
 
         this.speed = 50;
 
@@ -6687,7 +6654,7 @@ var Beam = function () {
     }
 
     _createClass(Beam, [{
-        key: 'update',
+        key: "update",
         value: function update(delta) {
             this.graphics.clear();
 
@@ -6699,7 +6666,7 @@ var Beam = function () {
             this.graphics.lineTo(this.end.x, this.end.y);
         }
     }, {
-        key: 'velocity',
+        key: "velocity",
         get: function get() {
             return { x: this.direction.x * this.speed, y: this.direction.y * this.speed };
         }
@@ -6708,17 +6675,32 @@ var Beam = function () {
     return Beam;
 }();
 
-var COLOUR = {
-    red: 0xFF0000,
-    orange: 0xFFA500,
-    yellow: 0xFFFF00,
-    green: 0x00FF00,
-    blue: 0x0000FF,
-    indigo: 0x4B0082,
-    violet: 0xEE82EE
+module.exports = Beam;
+
+},{}],299:[function(require,module,exports){
+"use strict";
+
+var PRISM_TYPE = {
+    REFLECT: 0,
+    REFRACT: 1,
+    DIFFUSE: 2,
+    ADD: 3,
+    SUBTRACT: 4,
+    EVOLVE: 5,
+    TINT: 6
 };
 
-var ORIENTATION = {
+var COLOUR = {
+    RED: 0xFF0000,
+    ORANGE: 0xFFA500,
+    YELLOW: 0xFFFF00,
+    GREEN: 0x00FF00,
+    BLUE: 0x0000FF,
+    INDIGO: 0x4B0082,
+    VIOLET: 0xEE82EE
+};
+
+var DIRECTION = {
     N: { x: 0, y: -1 },
     NE: { x: 1, y: -1 },
     E: { x: 1, y: 0 },
@@ -6729,23 +6711,26 @@ var ORIENTATION = {
     NW: { x: -1, y: -1 }
 };
 
-var PRISM_TYPE = {
-    reflect: 1,
-    refract: 1,
-    diffuse: 1,
-    add: 1,
-    subtract: 1,
-    evolve: 1,
-    tint: 1
+module.exports = {
+    PRISM_TYPE: PRISM_TYPE,
+    COLOUR: COLOUR,
+    DIRECTION: DIRECTION
 };
 
+},{}],300:[function(require,module,exports){
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var Prism = function () {
-    function Prism(type, colour, orientation, x, y) {
+    function Prism(type, colour, direction, x, y) {
         _classCallCheck(this, Prism);
 
         this.type = type;
         this.colour = colour;
-        this.orientation = orientation;
+        this.direction = direction;
         this.position = { x: x, y: y };
 
         this.graphics = new PIXI.Graphics();
@@ -6756,12 +6741,31 @@ var Prism = function () {
     }
 
     _createClass(Prism, [{
-        key: 'update',
+        key: "update",
         value: function update(delta) {}
     }]);
 
     return Prism;
 }();
+
+module.exports = Prism;
+
+},{}],301:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Screen = require('./Screen');
+var Beam = require('./Beam');
+
+var _require = require('./Constants');
+
+var PRISM_TYPE = _require.PRISM_TYPE;
+
+
+var screen = new Screen(800, 600, 50);
 
 var SceneManager = function () {
     function SceneManager() {
@@ -6801,7 +6805,7 @@ var SceneManager = function () {
                         beam.speed = 0;
 
                         var activatedPrism = this.occupied[position.x][position.y];
-                        if (activatedPrism.type === PRISM_TYPE.tint) {
+                        if (activatedPrism.type === PRISM_TYPE.TINT) {
                             var newBeam = new Beam(beam.end.x + beam.direction.x * 50, beam.end.y + beam.direction.y * 50, activatedPrism.colour, beam.direction);
                             this.pushBeam(newBeam);
                         }
@@ -6852,15 +6856,71 @@ var SceneManager = function () {
     return SceneManager;
 }();
 
+module.exports = SceneManager;
+
+},{"./Beam":298,"./Constants":299,"./Screen":302}],302:[function(require,module,exports){
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Screen = function () {
+    function Screen(width, height, gridLength) {
+        _classCallCheck(this, Screen);
+
+        this.width = width;
+        this.height = height;
+        this.gridLength = gridLength;
+    }
+
+    _createClass(Screen, [{
+        key: "getGridFromPosition",
+        value: function getGridFromPosition(x, y) {
+
+            return {
+                x: Math.floor(x / this.gridLength),
+                y: Math.floor(y / this.gridLength)
+            };
+        }
+    }]);
+
+    return Screen;
+}();
+
+module.exports = Screen;
+
+},{}],303:[function(require,module,exports){
+'use strict';
+
+require('babel-polyfill');
+
+var Beam = require('./Beam');
+var Prism = require('./Prism');
+var SceneManager = require('./SceneManager');
+
+var _require = require('./Constants');
+
+var PRISM_TYPE = _require.PRISM_TYPE;
+var DIRECTION = _require.DIRECTION;
+var COLOUR = _require.COLOUR;
+
+//TODO Don't make this a global
+
+window.stage = new PIXI.Container();
+
+var renderer = PIXI.autoDetectRenderer(800, 600, { antialias: true });
+document.getElementById('game').appendChild(renderer.view);
+
 var previousTime = Date.now() / 1000;
 
 var sceneManager = new SceneManager();
 
-sceneManager.pushBeam(new Beam(0, 175, COLOUR.violet, ORIENTATION.E));
-sceneManager.pushBeam(new Beam(300, 250, COLOUR.green, ORIENTATION.NW));
-sceneManager.pushBeam(new Beam(550, 175, COLOUR.yellow, ORIENTATION.W));
-sceneManager.pushPrism(new Prism(PRISM_TYPE.tint, COLOUR.red, ORIENTATION.N, 3, 3));
-sceneManager.pushPrism(new Prism(PRISM_TYPE.tint, COLOUR.orange, ORIENTATION.N, 4, 3));
+sceneManager.pushBeam(new Beam(0, 175, COLOUR.VIOLET, DIRECTION.E));
+sceneManager.pushBeam(new Beam(300, 250, COLOUR.GREEN, DIRECTION.NW));
+sceneManager.pushBeam(new Beam(550, 175, COLOUR.YELLOW, DIRECTION.W));
+sceneManager.pushPrism(new Prism(PRISM_TYPE.TINT, COLOUR.RED, DIRECTION.N, 3, 3));
+sceneManager.pushPrism(new Prism(PRISM_TYPE.TINT, COLOUR.ORANGE, DIRECTION.N, 4, 3));
 
 // run the render loop
 animate();
@@ -6877,4 +6937,4 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-},{"babel-polyfill":1}]},{},[298]);
+},{"./Beam":298,"./Constants":299,"./Prism":300,"./SceneManager":301,"babel-polyfill":1}]},{},[303]);
