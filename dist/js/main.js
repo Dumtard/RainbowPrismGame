@@ -6637,6 +6637,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 require('babel-polyfill');
 
+var Screen = function () {
+    function Screen(width, height, gridLength) {
+        _classCallCheck(this, Screen);
+
+        this.width = width;
+        this.height = height;
+        this.gridLength = gridLength;
+    }
+
+    _createClass(Screen, [{
+        key: 'getGridFromPosition',
+        value: function getGridFromPosition(x, y) {
+
+            return {
+                x: Math.floor(x / this.gridLength),
+                y: Math.floor(y / this.gridLength)
+            };
+        }
+    }]);
+
+    return Screen;
+}();
+
+var screen = new Screen(800, 600, 50);
+
 var renderer = PIXI.autoDetectRenderer(800, 600, { antialias: true });
 document.getElementById('game').appendChild(renderer.view);
 
@@ -6644,22 +6669,21 @@ document.getElementById('game').appendChild(renderer.view);
 var stage = new PIXI.Container();
 
 var Beam = function () {
-    function Beam(x, y) {
+    function Beam(x, y, colour, orientation) {
         _classCallCheck(this, Beam);
 
         this.graphics = new PIXI.Graphics();
 
         stage.addChild(this.graphics);
 
-        this.direction = {
-            x: 1,
-            y: 1
-        };
+        this.direction = orientation;
 
-        this.speed = 10;
+        this.speed = 50;
 
         this.end = { x: x, y: y };
         this.start = { x: x, y: y };
+
+        this.colour = colour;
     }
 
     _createClass(Beam, [{
@@ -6670,7 +6694,7 @@ var Beam = function () {
             this.end.x += this.velocity.x * delta;
             this.end.y += this.velocity.y * delta;
 
-            this.graphics.lineStyle(10, 0x33FF00);
+            this.graphics.lineStyle(10, this.colour, 0.5);
             this.graphics.moveTo(this.start.x, this.start.y);
             this.graphics.lineTo(this.end.x, this.end.y);
         }
@@ -6684,13 +6708,159 @@ var Beam = function () {
     return Beam;
 }();
 
+var COLOUR = {
+    red: 0xFF0000,
+    orange: 0xFFA500,
+    yellow: 0xFFFF00,
+    green: 0x00FF00,
+    blue: 0x0000FF,
+    indigo: 0x4B0082,
+    violet: 0xEE82EE
+};
+
+var ORIENTATION = {
+    N: { x: 0, y: -1 },
+    NE: { x: 1, y: -1 },
+    E: { x: 1, y: 0 },
+    SE: { x: 1, y: 1 },
+    S: { x: 0, y: 1 },
+    SW: { x: -1, y: 1 },
+    W: { x: -1, y: 0 },
+    NW: { x: -1, y: -1 }
+};
+
+var PRISM_TYPE = {
+    reflect: 1,
+    refract: 1,
+    diffuse: 1,
+    add: 1,
+    subtract: 1,
+    evolve: 1,
+    tint: 1
+};
+
+var Prism = function () {
+    function Prism(type, colour, orientation, x, y) {
+        _classCallCheck(this, Prism);
+
+        this.type = type;
+        this.colour = colour;
+        this.orientation = orientation;
+        this.position = { x: x, y: y };
+
+        this.graphics = new PIXI.Graphics();
+        this.graphics.beginFill(this.colour, 0.7);
+        this.graphics.drawRect(this.position.x * 50, this.position.y * 50, 50, 50);
+        this.graphics.endFill();
+        stage.addChild(this.graphics);
+    }
+
+    _createClass(Prism, [{
+        key: 'update',
+        value: function update(delta) {}
+    }]);
+
+    return Prism;
+}();
+
+var SceneManager = function () {
+    function SceneManager() {
+        _classCallCheck(this, SceneManager);
+
+        this.beams = [];
+        this.prisms = [];
+        this.occupied = [];
+    }
+
+    _createClass(SceneManager, [{
+        key: 'pushBeam',
+        value: function pushBeam(beam) {
+            this.beams.push(beam);
+        }
+    }, {
+        key: 'pushPrism',
+        value: function pushPrism(prism) {
+            this.prisms.push(prism);
+            this.occupied[prism.position.x] = this.occupied[prism.position.x] || [];
+            this.occupied[prism.position.x][prism.position.y] = prism;
+        }
+    }, {
+        key: 'update',
+        value: function update(delta) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.beams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var beam = _step.value;
+
+                    beam.update(delta);
+                    var position = screen.getGridFromPosition(beam.end.x, beam.end.y);
+                    if (typeof this.occupied[position.x] != 'undefined' && this.occupied[position.x][position.y] && beam.speed > 0) {
+                        beam.speed = 0;
+
+                        var activatedPrism = this.occupied[position.x][position.y];
+                        if (activatedPrism.type === PRISM_TYPE.tint) {
+                            var newBeam = new Beam(beam.end.x + beam.direction.x * 50, beam.end.y + beam.direction.y * 50, activatedPrism.colour, beam.direction);
+                            this.pushBeam(newBeam);
+                        }
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = this.prisms[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var prism = _step2.value;
+
+                    prism.update(delta);
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+        }
+    }]);
+
+    return SceneManager;
+}();
+
 var previousTime = Date.now() / 1000;
 
-var beams = [];
+var sceneManager = new SceneManager();
 
-for (var i = 0; i < 10; i++) {
-    beams.push(new Beam(i * 50, 30));
-}
+sceneManager.pushBeam(new Beam(0, 175, COLOUR.violet, ORIENTATION.E));
+sceneManager.pushBeam(new Beam(300, 250, COLOUR.green, ORIENTATION.NW));
+sceneManager.pushBeam(new Beam(550, 175, COLOUR.yellow, ORIENTATION.W));
+sceneManager.pushPrism(new Prism(PRISM_TYPE.tint, COLOUR.red, ORIENTATION.N, 3, 3));
+sceneManager.pushPrism(new Prism(PRISM_TYPE.tint, COLOUR.orange, ORIENTATION.N, 4, 3));
 
 // run the render loop
 animate();
@@ -6701,9 +6871,7 @@ function animate() {
     var delta = currentTime - previousTime;
     previousTime = currentTime;
 
-    for (var i = 0; i < beams.length; i++) {
-        beams[i].update(delta);
-    }
+    sceneManager.update(delta);
 
     renderer.render(stage);
     requestAnimationFrame(animate);
