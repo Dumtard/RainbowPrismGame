@@ -14,6 +14,18 @@ class Prism {
 
     update(delta) {
     }
+
+    static get TYPE() {
+        return {
+            REFLECT: 0,
+            REFRACT: 1,
+            DIFFUSE: 2,
+            ADD: 3,
+            SUBTRACT: 4,
+            EVOLVE: 5,
+            TINT: 6
+        }
+    }
 }
 
 module.exports = Prism;

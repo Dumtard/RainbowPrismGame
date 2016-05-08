@@ -1,13 +1,3 @@
-let PRISM_TYPE = {
-  REFLECT: 0,
-  REFRACT: 1,
-  DIFFUSE: 2,
-  ADD: 3,
-  SUBTRACT: 4,
-  EVOLVE: 5,
-  TINT: 6,
-};
-
 let COLOUR = {
     RED: 0xFF0000,
     ORANGE: 0xFFA500,
@@ -30,7 +20,6 @@ let DIRECTION = {
 };
 
 module.exports = {
-    PRISM_TYPE,
     COLOUR,
     DIRECTION
 };

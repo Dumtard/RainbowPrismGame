@@ -1,6 +1,6 @@
 let Screen = require('./Screen');
 let Beam = require('./Beam');
-let {PRISM_TYPE} = require('./Constants');
+let Prism = require('./Prism');
 
 let screen = new Screen({width: 800, height: 600, gridLength: 50});
 
@@ -30,7 +30,7 @@ class SceneManager {
                 beam.speed = 0;
 
                 let activatedPrism = this.occupied[position.x][position.y];
-                if (activatedPrism.type === PRISM_TYPE.TINT) {
+                if (activatedPrism.type === Prism.TYPE.TINT) {
                     this.add(Beam, {
                         x: beam.end.x + (beam.direction.x * 50),
                         y: beam.end.y + (beam.direction.y * 50),
