@@ -1,5 +1,5 @@
 class Screen {
-    constructor(width, height, gridLength) {
+    constructor({width, height, gridLength}) {
         this.width = width;
         this.height = height;
         this.gridLength = gridLength;

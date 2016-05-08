@@ -2,7 +2,7 @@ let Screen = require('./Screen');
 let Beam = require('./Beam');
 let {PRISM_TYPE} = require('./Constants');
 
-let screen = new Screen(800, 600, 50);
+let screen = new Screen({width: 800, height: 600, gridLength: 50});
 
 class SceneManager {
     constructor() {
@@ -11,27 +11,32 @@ class SceneManager {
         this.occupied = [];
     }
 
-    pushBeam(beam) {
-        this.beams.push(beam)
-    }
+    add(Class, params) {
+        var object = new Class(params);
+        this[Class.name.toLowerCase() + 's'].push(object);
 
-    pushPrism(prism) {
-        this.prisms.push(prism);
-        this.occupied[prism.position.x] = this.occupied[prism.position.x] || [];
-        this.occupied[prism.position.x][prism.position.y] = prism;
+        if (Class.name === 'Prism') {
+            this.occupied[object.position.x] = this.occupied[object.position.x] || [];
+            this.occupied[object.position.x][object.position.y] = object;
+        }
     }
 
     update(delta) {
         for (let beam of this.beams) {
             beam.update(delta);
+
             let position = screen.getGridFromPosition(beam.end.x, beam.end.y);
             if (typeof this.occupied[position.x] != 'undefined' && this.occupied[position.x][position.y] && beam.speed > 0) {
                 beam.speed = 0;
 
                 let activatedPrism = this.occupied[position.x][position.y];
                 if (activatedPrism.type === PRISM_TYPE.TINT) {
-                    let newBeam = new Beam(beam.end.x + (beam.direction.x * 50), beam.end.y + (beam.direction.y * 50), activatedPrism.colour, beam.direction);
-                    this.pushBeam(newBeam);
+                    this.add(Beam, {
+                        x: beam.end.x + (beam.direction.x * 50),
+                        y: beam.end.y + (beam.direction.y * 50),
+                        colour: activatedPrism.colour,
+                        direction: beam.direction
+                    });
                 }
             }
         }

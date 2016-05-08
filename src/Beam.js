@@ -1,5 +1,5 @@
 class Beam {
-    constructor(x, y, colour, direction) {
+    constructor({x, y, colour, direction}) {
         this.graphics = new PIXI.Graphics();
 
         stage.addChild(this.graphics);

@@ -1,5 +1,5 @@
 class Prism {
-    constructor(type, colour, direction, x, y) {
+    constructor({x, y, type, colour, direction}) {
         this.type = type;
         this.colour = colour;
         this.direction = direction;
