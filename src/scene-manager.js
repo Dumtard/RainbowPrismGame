@@ -1,6 +1,6 @@
-let Screen = require('./Screen');
-let Beam = require('./Beam');
-let Prism = require('./Prism');
+let Screen = require('./screen');
+let Beam = require('./beam');
+let Prism = require('./prism');
 
 let screen = new Screen({width: 800, height: 600, gridLength: 50});
 

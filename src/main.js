@@ -1,9 +1,9 @@
 require('babel-polyfill');
 
-let Beam = require('./Beam');
-let Prism = require('./Prism');
-let SceneManager = require('./SceneManager');
-let {DIRECTION, COLOUR} = require('./Constants');
+let Beam = require('./beam');
+let Prism = require('./prism');
+let SceneManager = require('./scene-manager');
+let {DIRECTION, COLOUR} = require('./constants');
 
 //TODO Don't make this a global
 window.stage = new PIXI.Container();
