@@ -11,13 +11,17 @@ class SceneManager {
         this.occupied = [];
     }
 
-    add(Class, params) {
-        var object = new Class(params);
-        this[Class.name.toLowerCase() + 's'].push(object);
+    get add() {
+        return {
+            beam: (obj) => {
+                this.beams.push(obj);
+            },
+            prism: (obj) => {
+                this.prisms.push(obj);
 
-        if (Class.name === 'Prism') {
-            this.occupied[object.position.x] = this.occupied[object.position.x] || [];
-            this.occupied[object.position.x][object.position.y] = object;
+                this.occupied[obj.position.x] = this.occupied[obj.position.x] || [];
+                this.occupied[obj.position.x][obj.position.y] = obj;
+            }
         }
     }
 
@@ -31,12 +35,12 @@ class SceneManager {
 
                 let activatedPrism = this.occupied[position.x][position.y];
                 if (activatedPrism.type === Prism.TYPE.TINT) {
-                    this.add(Beam, {
+                    this.add.beam(new Beam({
                         x: beam.end.x + (beam.direction.x * 50),
                         y: beam.end.y + (beam.direction.y * 50),
                         colour: activatedPrism.colour,
                         direction: beam.direction
-                    });
+                    }));
                 }
             }
         }
