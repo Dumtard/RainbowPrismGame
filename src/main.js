@@ -28,6 +28,9 @@ sceneManager.add.beam(new Beam({ x: 300, y: 250, colour: COLOUR.GREEN, direction
 //REFLECT test
 sceneManager.add.prism(new Prism({ x: 4, y: 3, type: Prism.TYPE.REFLECT, colour: COLOUR.GREEN, direction: DIRECTION.N }));
 
+//REFRACT test
+sceneManager.add.beam(new Beam({ x: 300, y: 325, colour: COLOUR.RED, direction: DIRECTION.E }));
+sceneManager.add.prism(new Prism({ x: 7, y: 6, type: Prism.TYPE.REFRACT, colour: COLOUR.RED, direction: DIRECTION.NW }));
 
 // run the render loop
 animate();

@@ -34,6 +34,12 @@ class Prism {
                 this.graphics.lineTo(50, 50);
             }
         }
+        
+        if (this.type === Prism.TYPE.REFRACT) {
+            this.graphics.lineStyle(5, 0x000000, 0.5);
+            this.graphics.moveTo(25,25);
+            this.graphics.lineTo(25 + this.direction.x * 25, 25 + this.direction.y * 25);
+        }
         stage.addChild(this.graphics);
     }
 

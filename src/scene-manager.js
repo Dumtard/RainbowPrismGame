@@ -42,6 +42,7 @@ class SceneManager {
                         colour: activatedPrism.colour,
                         direction: beam.direction
                     }));
+                
                 //REFLECT Logic
                 } else if (activatedPrism.type === Prism.TYPE.REFLECT && activatedPrism.colour === beam.colour) {
                     let newBeamDirection = {x: beam.direction.x, y: beam.direction.y};
@@ -64,6 +65,16 @@ class SceneManager {
                         colour: beam.colour,
                         direction: newBeamDirection,
                     }));
+
+                //REFRACT Logic
+                } else if (activatedPrism.type === Prism.TYPE.REFRACT && activatedPrism.colour === beam.colour) {
+                    this.add.beam(new Beam({
+                        x: activatedPrism.position.x * 50 + 25 + (activatedPrism.direction.x * 25),
+                        y: activatedPrism.position.y * 50 + 25 + (activatedPrism.direction.y * 25),
+                        colour: beam.colour,
+                        direction: activatedPrism.direction
+                    }));
+
                 } else {
                     this.add.beam(new Beam({
                         x: beam.end.x + (beam.direction.x * 50),
