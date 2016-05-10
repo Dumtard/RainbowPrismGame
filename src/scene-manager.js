@@ -55,14 +55,23 @@ class SceneManager {
                     } else if ((activatedPrism.direction === DIRECTION.NW || activatedPrism.direction === DIRECTION.SE) && beam.direction.x !== beam.direction.y) {
                         newBeamDirection.x = beam.direction.y * -1;
                         newBeamDirection.y = beam.direction.x * -1;
-                    } else { continue; }
+                    } else { 
+                        continue; 
+                    }
                     this.add.beam(new Beam({
                         x: (newBeamDirection.x * 25  ) + (position.x * 50) + 25,
                         y: (newBeamDirection.y * 25  ) + (position.y * 50) + 25,
                         colour: beam.colour,
                         direction: newBeamDirection,
                     }));
-                }
+                } else { 
+                    this.add.beam(new Beam({
+                        x: beam.end.x + (beam.direction.x * 50),
+                        y: beam.end.y + (beam.direction.y * 50),
+                        colour: beam.colour,
+                        direction: beam.direction
+                    }));
+                };
             }
         }
         for (let prism of this.prisms) {
