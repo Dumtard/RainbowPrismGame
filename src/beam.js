@@ -6,7 +6,7 @@ class Beam {
 
         this.direction = direction;
 
-        this.speed = 50;
+        this.speed = 100;
 
         this.end = { x, y };
         this.start = { x, y };

@@ -6,28 +6,32 @@ class Prism {
         this.position = { x, y };
 
         this.graphics = new PIXI.Graphics();
+        this.graphics.position.set(this.position.x * 50 + 25, this.position.y * 50 + 25);
+        this.graphics.width = 50;
+        this.graphics.height = 50;
+        this.graphics.pivot.set(25, 25);
         this.graphics.beginFill(this.colour, 0.7);
-        this.graphics.drawRect(this.position.x * 50, this.position.y * 50, 50, 50);
+        this.graphics.drawRect(0, 0, 50, 50);
         this.graphics.endFill();
 
         if (this.type === Prism.TYPE.REFLECT) {
             this.graphics.lineStyle(5, 0x000000, 0.5);
             if (this.direction.x === 0) {
                 console.log("E/W: also, direction: " + this.direction);
-                this.graphics.moveTo(this.position.x * 50, this.position.y * 50 + 25);
-                this.graphics.lineTo(this.position.x * 50 + 50, this.position.y * 50 + 25);
+                this.graphics.moveTo(0, 25);
+                this.graphics.lineTo(50, 25);
             } else if (this.direction.y === 0) {
                 console.log("N/S: also, direction: " + this.direction);
-                this.graphics.moveTo(this.position.x * 50 + 25, this.position.y * 50);
-                this.graphics.lineTo(this.position.x * 50 + 25, this.position.y * 50 + 50);
+                this.graphics.moveTo(25, 0);
+                this.graphics.lineTo(25, 50);
             } else if (this.direction.x === this.direction.y) {
                 console.log("NE/SW: also, direction: " + this.direction);
-                this.graphics.moveTo(this.position.x * 50 + 50, this.position.y * 50);
-                this.graphics.lineTo(this.position.x * 50, this.position.y * 50 + 50);
+                this.graphics.moveTo(50, 0);
+                this.graphics.lineTo(0, 50);
             } else if (this.direction.x === -1 * this.direction.y) {
                 console.log("NW/SE: also, direction: " + this.direction);
-                this.graphics.moveTo(this.position.x * 50, this.position.y * 50);
-                this.graphics.lineTo(this.position.x * 50 + 50, this.position.y * 50 + 50);
+                this.graphics.moveTo(0, 0);
+                this.graphics.lineTo(50, 50);
             }
         }
         stage.addChild(this.graphics);
