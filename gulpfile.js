@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     through2 = require('through2'),
     babelify = require('babelify'),
     rename = require('gulp-rename'),
-    webserver = require('gulp-webserver');
+    webserver = require('gulp-webserver'),
+    runSequence = require('run-sequence');
 
 gulp.task('build', function () {
     return gulp.src('./src/main.js')
@@ -37,4 +38,6 @@ gulp.task('serve', function() {
         }));
 });
 
-gulp.task('default', ['serve', 'watch']);
+gulp.task('default', function(cb) {
+    runSequence('build', 'serve', 'watch', cb);
+});
