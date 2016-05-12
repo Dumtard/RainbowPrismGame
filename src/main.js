@@ -1,6 +1,7 @@
 require('babel-polyfill');
 
 let Beam = require('./beam');
+let ReflectPrism = require('./prisms/reflect');
 let Prism = require('./prism');
 let SceneManager = require('./scene-manager');
 let {DIRECTION, COLOUR} = require('./constants');
@@ -26,7 +27,7 @@ sceneManager.add.beam(new Beam({ x: 300, y: 250, colour: COLOUR.GREEN, direction
 //sceneManager.add.prism(new Prism({ x: 7, y: 3, type: Prism.TYPE.TINT, colour: COLOUR.ORANGE, direction: DIRECTION.W }));
 
 //REFLECT test
-sceneManager.add.prism(new Prism({ x: 4, y: 3, type: Prism.TYPE.REFLECT, colour: COLOUR.GREEN, direction: DIRECTION.N }));
+sceneManager.add.prism(new ReflectPrism({ x: 4, y: 3, colour: COLOUR.GREEN, direction: DIRECTION.N }));
 
 //REFRACT test
 sceneManager.add.beam(new Beam({ x: 300, y: 325, colour: COLOUR.RED, direction: DIRECTION.E }));

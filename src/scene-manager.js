@@ -1,8 +1,8 @@
-let Screen = require('./screen');
+let Grid = require('./grid');
 let Beam = require('./beam');
 let Prism = require('./prism');
 
-let screen = new Screen({width: 800, height: 600, gridLength: 50});
+let grid = new Grid({width: 800, height: 600});
 
 let {DIRECTION, COLOUR} = require('./constants');
 
@@ -31,62 +31,32 @@ class SceneManager {
         for (let beam of this.beams) {
             beam.update(delta);
 
-            let position = screen.getGridFromPosition(beam.end.x, beam.end.y);
+            let position = grid.getGridFromPosition(beam.end.x, beam.end.y);
             if (typeof this.occupied[position.x] != 'undefined' && this.occupied[position.x][position.y] && beam.speed > 0) {
                 beam.speed = 0;
                 let activatedPrism = this.occupied[position.x][position.y];
-                if (activatedPrism.type === Prism.TYPE.TINT) {
-                    this.add.beam(new Beam({
-                        x: beam.end.x + (beam.direction.x * 50),
-                        y: beam.end.y + (beam.direction.y * 50),
-                        colour: activatedPrism.colour,
-                        direction: beam.direction
-                    }));
+                var newBeams = activatedPrism.handle(beam);
+                for (let newBeam of newBeams) {
+                    this.add.beam(newBeam);
+                }
                 
-                //REFLECT Logic
-                } else if (activatedPrism.type === Prism.TYPE.REFLECT && activatedPrism.colour === beam.colour) {
-                    let newBeamDirection = {x: beam.direction.x, y: beam.direction.y};
-                    if ((activatedPrism.direction === DIRECTION.N || activatedPrism.direction === DIRECTION.S) && beam.direction.y !== 0) {
-                        newBeamDirection.y = beam.direction.y * -1;
-                    } else if ((activatedPrism.direction === DIRECTION.E || activatedPrism.direction === DIRECTION.W) && beam.direction.x !== 0) {
-                        newBeamDirection.x = beam.direction.x * -1;
-                    } else if ((activatedPrism.direction === DIRECTION.NE || activatedPrism.direction === DIRECTION.SW) && beam.direction.x !== -1 * beam.direction.y) {
-                        newBeamDirection.x = beam.direction.y;
-                        newBeamDirection.y = beam.direction.x;
-                    } else if ((activatedPrism.direction === DIRECTION.NW || activatedPrism.direction === DIRECTION.SE) && beam.direction.x !== beam.direction.y) {
-                        newBeamDirection.x = beam.direction.y * -1;
-                        newBeamDirection.y = beam.direction.x * -1;
-                    } else {
-                        continue;
-                    }
-                    this.add.beam(new Beam({
-                        x: (newBeamDirection.x * 25  ) + (position.x * 50) + 25,
-                        y: (newBeamDirection.y * 25  ) + (position.y * 50) + 25,
-                        colour: beam.colour,
-                        direction: newBeamDirection,
-                    }));
+                //REFLECT
+                if (activatedPrism.type === Prism.TYPE.REFLECT && activatedPrism.colour === beam.colour) {
+                    
 
                 //REFRACT Logic
                 } else if (activatedPrism.type === Prism.TYPE.REFRACT && activatedPrism.colour === beam.colour) {
                     this.add.beam(new Beam({
-                        x: activatedPrism.position.x * 50 + 25 + (activatedPrism.direction.x * 25),
-                        y: activatedPrism.position.y * 50 + 25 + (activatedPrism.direction.y * 25),
+                        x: activatedPrism.position.x * Grid.LENGTH + Grid.LENGTH/2 + (activatedPrism.direction.x * Grid.LENGTH/2),
+                        y: activatedPrism.position.y * Grid.LENGTH + Grid.LENGTH/2 + (activatedPrism.direction.y * Grid.LENGTH/2),
                         colour: beam.colour,
                         direction: activatedPrism.direction
                     }));
 
                 } else {
-                    this.add.beam(new Beam({
-                        x: beam.end.x + (beam.direction.x * 50),
-                        y: beam.end.y + (beam.direction.y * 50),
-                        colour: beam.colour,
-                        direction: beam.direction
-                    }));
+                    
                 };
             }
-        }
-        for (let prism of this.prisms) {
-            prism.update(delta);
         }
     }
 }
