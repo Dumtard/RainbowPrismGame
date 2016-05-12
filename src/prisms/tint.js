@@ -1,5 +1,6 @@
 let Grid = require('../grid');
 let Prism = require('../prism');
+let Beam = require('../beam');
 
 class TintPrism extends Prism {
     constructor({x, y, colour, direction}) {
@@ -10,7 +11,7 @@ class TintPrism extends Prism {
         return [new Beam({
             x: beam.end.x + (beam.direction.x * Grid.LENGTH),
             y: beam.end.y + (beam.direction.y * Grid.LENGTH),
-            colour: activatedPrism.colour,
+            colour: this.colour,
             direction: beam.direction
         })];
     }

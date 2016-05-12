@@ -16,11 +16,6 @@ class Prism {
         this.graphics.drawRect(0, 0, Grid.LENGTH, Grid.LENGTH);
         this.graphics.endFill();
         
-        if (this.type === Prism.TYPE.REFRACT) {
-            this.graphics.lineStyle(5, 0x000000, 0.5);
-            this.graphics.moveTo(Grid.LENGTH/2,Grid.LENGTH/2);
-            this.graphics.lineTo(Grid.LENGTH/2 + this.direction.x * Grid.LENGTH/2, Grid.LENGTH/2 + this.direction.y * Grid.LENGTH/2);
-        }
         stage.addChild(this.graphics);
     }
 

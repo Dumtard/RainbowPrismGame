@@ -39,23 +39,6 @@ class SceneManager {
                 for (let newBeam of newBeams) {
                     this.add.beam(newBeam);
                 }
-                
-                //REFLECT
-                if (activatedPrism.type === Prism.TYPE.REFLECT && activatedPrism.colour === beam.colour) {
-                    
-
-                //REFRACT Logic
-                } else if (activatedPrism.type === Prism.TYPE.REFRACT && activatedPrism.colour === beam.colour) {
-                    this.add.beam(new Beam({
-                        x: activatedPrism.position.x * Grid.LENGTH + Grid.LENGTH/2 + (activatedPrism.direction.x * Grid.LENGTH/2),
-                        y: activatedPrism.position.y * Grid.LENGTH + Grid.LENGTH/2 + (activatedPrism.direction.y * Grid.LENGTH/2),
-                        colour: beam.colour,
-                        direction: activatedPrism.direction
-                    }));
-
-                } else {
-                    
-                };
             }
         }
     }
