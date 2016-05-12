@@ -46,11 +46,15 @@ var fragmentShader = [
     'void main(void)',
     '{',
     '    vec4 pixel = texture2D(uSampler, vTextureCoord);',
-    '    if (pixel.r > 0.0 || pixel.g > 0.0 || pixel.b > 0.0)',
+    '    if (pixel.r > 0.1 || pixel.g > 0.1 || pixel.b > 0.1)',
     '    {',
     '        float wave = sin(3.0 * delta);',
     '        gl_FragColor = mix(vec4(1.0, 0.0, 0.0, 0.0), vec4(0.0, 1.0, 0.0, 0.0), wave);',
     '    }',
+    '   else',
+    '   {',
+    '       gl_FragColor = pixel;',
+    '   }',
     '}'
   ].join('\n');
 
@@ -84,8 +88,8 @@ function animate() {
 
     var delta = currentTime - previousTime;
     previousTime = currentTime;
-	
-	filter.uniforms.delta.value += delta;
+
+    filter.uniforms.delta.value += delta;
 
     sceneManager.update(delta);
 
