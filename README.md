@@ -9,7 +9,7 @@ Prisms
 6. Removes a different colour's properties -> subtract.js
 7. Make yourself have a property of a block -> evolve.js
 
-h1. HOW TO RUN:
+##HOW TO RUN:
 npm install
 gulp
 
