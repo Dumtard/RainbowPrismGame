@@ -16,7 +16,18 @@ let DIRECTION = {
   S: { x: 0, y: 1 },
   SW: { x: -1, y: 1 },
   W: { x: -1, y: 0 },
-  NW: { x: -1, y: -1 }
+  NW: { x: -1, y: -1 },
+  compare: function (obj1, obj2) {
+    if (!obj1 || !obj2) {
+      return false
+    }
+
+    if (obj1.x === obj2.x && obj1.y === obj2.y) {
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
 module.exports = {
