@@ -29,11 +29,18 @@ class SceneManager {
 
       let position = grid.getGridFromPosition(beam.end.x, beam.end.y)
       if (typeof this.occupied[position.x] !== 'undefined' && this.occupied[position.x][position.y] && beam.speed > 0) {
-        beam.speed = 0
         let activatedPrism = this.occupied[position.x][position.y]
+
+        beam.speed = 0
+
+        beam.end.x = Math.round(beam.end.x / (Grid.LENGTH / 2)) * Grid.LENGTH / 2
+        beam.end.y = Math.round(beam.end.y / (Grid.LENGTH / 2)) * Grid.LENGTH / 2
+
         var newBeams = activatedPrism.handle(beam)
         for (let newBeam of newBeams) {
-          this.add.beam(newBeam)
+          setTimeout(() => {
+            this.add.beam(newBeam)
+          }, (40 * Math.pow(25, 2)) / newBeam.speed)
         }
       }
     }

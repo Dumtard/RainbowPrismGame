@@ -12,13 +12,10 @@ class RefractPrism extends Prism {
   }
 
   handle (beam) {
-    if (this.colour !== beam.colour) {
-      return [new Beam({
-        x: beam.end.x + (beam.direction.x * Grid.LENGTH),
-        y: beam.end.y + (beam.direction.y * Grid.LENGTH),
-        colour: beam.colour,
-        direction: beam.direction
-      })]
+    var retValue = super.handle(beam)
+
+    if (retValue) {
+      return retValue
     }
 
     return [new Beam({

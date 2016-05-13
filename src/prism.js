@@ -1,14 +1,16 @@
 let Grid = require('./grid')
+let Beam = require('./beam')
+let renderer = require('./renderer')
 
 var PIXI = window.PIXI
-var stage = window.stage
 
 class Prism {
   constructor ({x, y, type, colour, direction}) {
     this.type = type
     this.colour = colour
     this.direction = direction
-    this.position = { x, y }
+    this.x = x
+    this.y = y
 
     this.graphics = new PIXI.Graphics()
     this.graphics.position.set(this.position.x * Grid.LENGTH + Grid.LENGTH / 2, this.position.y * Grid.LENGTH + Grid.LENGTH / 2)
@@ -19,11 +21,25 @@ class Prism {
     this.graphics.drawRect(0, 0, Grid.LENGTH, Grid.LENGTH)
     this.graphics.endFill()
 
-    stage.addChild(this.graphics)
+    renderer.addChild(this.graphics)
+  }
+
+  get position () {
+    return {
+      x: this.x,
+      y: this.y
+    }
   }
 
   handle (beam) {
-    return []
+    if (this.colour !== beam.colour) {
+      return [new Beam({
+        x: beam.end.x + (beam.direction.x * Grid.LENGTH),
+        y: beam.end.y + (beam.direction.y * Grid.LENGTH),
+        colour: beam.colour,
+        direction: beam.direction
+      })]
+    }
   }
 
   static get TYPE () {

@@ -24,13 +24,10 @@ class ReflectPrism extends Prism {
   }
 
   handle (beam) {
-    if (this.colour !== beam.colour) {
-      return [new Beam({
-        x: beam.end.x + (beam.direction.x * Grid.LENGTH),
-        y: beam.end.y + (beam.direction.y * Grid.LENGTH),
-        colour: beam.colour,
-        direction: beam.direction
-      })]
+    var retValue = super.handle(beam)
+
+    if (retValue) {
+      return retValue
     }
 
     let newBeamDirection = {x: beam.direction.x, y: beam.direction.y}

@@ -1,11 +1,12 @@
+var renderer = require('./renderer')
+
 var PIXI = window.PIXI
-var stage = window.stage
 
 class Beam {
   constructor ({x, y, colour, direction}) {
     this.graphics = new PIXI.Graphics()
 
-    stage.addChild(this.graphics)
+    renderer.addChild(this.graphics)
 
     this.direction = direction
 
@@ -27,7 +28,7 @@ class Beam {
     this.end.x += this.velocity.x * delta
     this.end.y += this.velocity.y * delta
 
-    this.graphics.lineStyle(10, this.colour, 0.5)
+    this.graphics.lineStyle(5, this.colour, 0.5)
     this.graphics.moveTo(this.start.x, this.start.y)
     this.graphics.lineTo(this.end.x, this.end.y)
   }
