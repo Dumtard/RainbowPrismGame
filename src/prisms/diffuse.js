@@ -7,20 +7,15 @@ class DiffusePrism extends Prism {
   constructor ({x, y, colour, direction}) {
     super({x, y, colour, direction})
 
-    // this.graphics.lineStyle(5, 0x000000, 0.5)
-    // if (this.direction.x === 0) {
-    //   this.graphics.moveTo(0, Grid.LENGTH / 2)
-    //   this.graphics.lineTo(Grid.LENGTH, Grid.LENGTH / 2)
-    // } else if (this.direction.y === 0) {
-    //   this.graphics.moveTo(Grid.LENGTH / 2, 0)
-    //   this.graphics.lineTo(Grid.LENGTH / 2, Grid.LENGTH)
-    // } else if (this.direction.x === this.direction.y) {
-    //   this.graphics.moveTo(Grid.LENGTH, 0)
-    //   this.graphics.lineTo(0, Grid.LENGTH)
-    // } else if (this.direction.x === -1 * this.direction.y) {
-    //   this.graphics.moveTo(0, 0)
-    //   this.graphics.lineTo(Grid.LENGTH, Grid.LENGTH)
-    // }
+    this.graphics.lineStyle(5, 0x000000, 0.5)
+    this.graphics.moveTo(0, 0)
+    this.graphics.lineTo(Grid.LENGTH, Grid.LENGTH)
+    this.graphics.moveTo(Grid.LENGTH / 2, 0)
+    this.graphics.lineTo(Grid.LENGTH / 2, Grid.LENGTH)
+    this.graphics.moveTo(Grid.LENGTH, 0)
+    this.graphics.lineTo(0, Grid.LENGTH)
+    this.graphics.moveTo(Grid.LENGTH, Grid.LENGTH / 2)
+    this.graphics.lineTo(0, Grid.LENGTH / 2)
   }
 
   handle (beam) {

@@ -10,7 +10,7 @@ class Beam {
 
     this.direction = direction
 
-    this.speed = 100
+    this.speed = 200
 
     this.end = { x, y }
     this.start = { x, y }
